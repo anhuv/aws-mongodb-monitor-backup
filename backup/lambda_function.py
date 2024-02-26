@@ -1,3 +1,4 @@
+import json
 import pymongo
 import os
 import boto3
@@ -11,7 +12,7 @@ DATABASE_NAME = os.environ.get('DATABASE_NAME')
 AWS_S3_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET_NAME')
 
 
-def backup_mongodb():
+def lambda_handler(event, context):
     client = pymongo.MongoClient(MONGO_CONNECTION_URL)
     db = client[DATABASE_NAME]
 
@@ -31,4 +32,4 @@ def backup_mongodb():
     s3_client = boto3.client('s3')
     s3_client.upload_file(filename, AWS_S3_BUCKET_NAME, filename)
 
-    print(f"Backup successful: {filename}")
+    return json.dumps(f"Backup successful: {filename}")
