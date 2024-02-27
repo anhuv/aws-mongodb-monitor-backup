@@ -26,10 +26,10 @@ def lambda_handler(event, context):
 
     filename = f"mongodb_backup_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.json"
 
-    with open("tmp/" + filename, 'w') as file:
+    with open("/tmp/" + filename, 'w') as file:
         file.write(dumps(backup_data))
 
     s3_client = boto3.client('s3')
-    s3_client.upload_file("tmp/" +filename, AWS_S3_BUCKET_NAME, filename)
+    s3_client.upload_file("/tmp/" + filename, AWS_S3_BUCKET_NAME, filename)
 
     return json.dumps(f"Backup successful: {filename}")
